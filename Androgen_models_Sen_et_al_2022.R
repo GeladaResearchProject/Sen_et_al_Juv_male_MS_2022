@@ -40,7 +40,7 @@ z_transform <- function(var){
 
 ######################....................###########################
 
-#################Reading in Androgen dataframe ######################
+#################Reading in Androgen dataframe######################
 
 df_models <- read.csv("/Users/sharmisen/Desktop/CURRENT MANUSCRIPT PROJECTS/1.T VALIDATION PAPER/T_MS_Input_Files/revised_androgen_dataset_6.25.2022.csv")
 df_models <- df_models %>% dplyr::select(male.ID, ng.g, sample.date, age.sample, mrank_birth, mrank_prop, unit.size.cont, 
@@ -229,7 +229,7 @@ coefTable(avg_old)
 
 
 ######################....................################################
-#      Androgen models with monthly maternal ranks                     #
+#       Androgen models with monthly maternal ranks                     #
 ######################....................################################
 
 #pre-independence males - using maternal ranks calculated at each month
@@ -323,8 +323,8 @@ mean_pat.sibs             <- mean(older_males$pat.sibs.sample)
 mean_unit.size            <- mean(older_males$unit.size.cont)
 
 #set the age increment interval at 0.25 
-int               <- 0.25 #interval by which age increases from 2.5 years onwards 
-x                 <- (((9-2.5)/int) + 1)*2 #number of fAM values needed for each age bin
+int                       <- 0.25 #interval by which age increases from 2.5 years onwards 
+x                         <- (((9-2.5)/int) + 1)*2 #number of fAM values needed for each age bin
 
 
 
@@ -352,28 +352,28 @@ rank_effect_birth          <- ggplot(data = rank_int_1, aes(x = mrank_birth_cat,
 rank_effect_birth
 
 #checking how maternal rank at each month interacts with age for T 
-int2              <- lmer(log(ng.g) ~ age.sample + mrank_prop +  pat.sibs.sample +  
-                   unit.size.cont + cum.rain + max.Temp + (1|male.ID), REML = F,data = older_males)
+int2                       <- lmer(log(ng.g) ~ age.sample + mrank_prop +  pat.sibs.sample +  
+                               unit.size.cont + cum.rain + max.Temp + (1|male.ID), REML = F,data = older_males)
 summary(int2)
 
 
-rank_int2          <- data.frame(mrank_prop = c(rep(0,x/2),rep(1,x/2)), 
-                       age.sample = rep(seq(2.5,9, int),2 ), cum.rain = rep(mean_rain,x), max.Temp = rep(mean_max.temp,x),
-                       unit.size.cont = rep(mean_unit.size,x), pat.sibs.sample = rep(mean_pat.sibs,x))
+rank_int2                   <- data.frame(mrank_prop = c(rep(0,x/2),rep(1,x/2)), 
+                               age.sample = rep(seq(2.5,9, int),2 ), cum.rain = rep(mean_rain,x), max.Temp = rep(mean_max.temp,x),
+                               unit.size.cont = rep(mean_unit.size,x), pat.sibs.sample = rep(mean_pat.sibs,x))
                
-rank_int2$log.ng.g <- predict(int2, newdata = rank_int2, re.form = NA)
+rank_int2$log.ng.g          <- predict(int2, newdata = rank_int2, re.form = NA)
 
-rank_int2$mrank_prop_cat <- ifelse(rank_int2$mrank_prop <=0.5, "Low", "High")
-rank_int2$mrank_prop_cat <- factor(rank_int2$mrank_prop_cat, levels = c("High", "Low"))
-rank_col <- c("High" = makeTransparent("#117733", 200), "Low" = makeTransparent("#44AA99", 200))
+rank_int2$mrank_prop_cat    <- ifelse(rank_int2$mrank_prop <=0.5, "Low", "High")
+rank_int2$mrank_prop_cat    <- factor(rank_int2$mrank_prop_cat, levels = c("High", "Low"))
+rank_col                    <- c("High" = makeTransparent("#117733", 200), "Low" = makeTransparent("#44AA99", 200))
 
 #boxplots with predicted log ng/g - maternal rank at each month of sample collection
-rank_effect_monthly <- ggplot(data = rank_int2, aes(x = mrank_prop_cat, y = log.ng.g,  fill = mrank_prop_cat))  + 
-  geom_boxplot(show.legend = F, position = "dodge") + ylab(" ") + 
-  xlab("\nMaternal rank (monthly)") + theme_pubr(base_family = "Arial", base_size = 16) + 
-  theme(legend.text=element_text(size=16), axis.title = element_text(size=16), axis.text.y=element_blank()) +
-  scale_color_manual("Maternal rank", values = rank_col)  + 
-  scale_fill_manual("Maternal rank", values = rank_col) + ylim (c(5,7)) + stat_compare_means(label = "p.format")
+rank_effect_monthly         <- ggplot(data = rank_int2, aes(x = mrank_prop_cat, y = log.ng.g,  fill = mrank_prop_cat))  + 
+                               geom_boxplot(show.legend = F, position = "dodge") + ylab(" ") + 
+                               xlab("\nMaternal rank (monthly)") + theme_pubr(base_family = "Arial", base_size = 16) + 
+                               theme(legend.text=element_text(size=16), axis.title = element_text(size=16), axis.text.y=element_blank()) +
+                               scale_color_manual("Maternal rank", values = rank_col)  + 
+                               scale_fill_manual("Maternal rank", values = rank_col) + ylim (c(5,7)) + stat_compare_means(label = "p.format")
 rank_effect_monthly
 
 jpeg("HB_Supp_Fig9.jpg", width = 16, height = 12, units = "cm", res = 340)
