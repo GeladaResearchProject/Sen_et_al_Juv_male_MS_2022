@@ -2,5 +2,5 @@
 Data and code for Sen et al 2022: Social correlates of androgen levels and dispersal age in juvenile male geladas. 
 There are three R code files for this MS.
 1. Analytical validtion plots + Supp figures
-2. Androgen models and plots 
-3. Dispersal model and plots
+2. Androgen models and plots + Supp figures
+3. Dispersal model and plots + Supp figures
